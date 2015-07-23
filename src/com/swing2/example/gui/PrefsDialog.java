@@ -1,4 +1,4 @@
-package com.swing1.example.gui;
+package com.swing2.example.gui;
 
 import javax.swing.*;
 import javax.swing.border.Border;

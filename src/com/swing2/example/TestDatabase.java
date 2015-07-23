@@ -1,6 +1,6 @@
-package com.swing1.example;
+package com.swing2.example;
 
-import com.swing1.example.model.*;
+import com.swing2.example.model.*;
 
 import java.sql.SQLException;
 

@@ -1,4 +1,4 @@
-package com.swing1.example.gui;
+package com.swing2.example.gui;
 
 /**
  * Created by garrettcoggon on 6/25/15.

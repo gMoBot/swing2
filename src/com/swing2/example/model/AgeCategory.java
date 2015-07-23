@@ -1,4 +1,4 @@
-package com.swing1.example.model;
+package com.swing2.example.model;
 
 /**
  * Created by garrettcoggon on 6/26/15.

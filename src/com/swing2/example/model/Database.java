@@ -1,4 +1,4 @@
-package com.swing1.example.model;
+package com.swing2.example.model;
 
 import java.io.*;
 import java.sql.*;
@@ -64,14 +64,14 @@ public class Database {
         if (con != null){
             return;
         }
-//        try {
-//            Class.forName("org.sqlite.JDBC");
+        try {
+            Class.forName("org.sqlite.JDBC");
             String connectionUrl = "jdbc:sqlite:swing.db";
             // TODO: set up user with restricted priveleges, name = 2nd arg, password = 3rd//
             con = DriverManager.getConnection(connectionUrl);
-//        } catch (ClassNotFoundException e) {
-//            throw new RuntimeException("Unable to find class for loading database", e);
-//        }
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException("Unable to find class for loading database", e);
+        }
         if (con != null) {
 
             System.out.println("Connected to db" + con);

@@ -1,7 +1,7 @@
-package com.swing1.example.controller;
+package com.swing2.example.controller;
 
-import com.swing1.example.gui.FormEvent;
-import com.swing1.example.model.*;
+import com.swing2.example.gui.FormEvent;
+import com.swing2.example.model.*;
 
 import java.io.File;
 import java.io.IOException;

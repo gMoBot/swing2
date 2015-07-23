@@ -1,13 +1,10 @@
-package com.swing1.example.gui;
+package com.swing2.example.gui;
 
-import com.sun.codemodel.internal.JOp;
-import com.swing1.example.controller.Controller;
+import com.swing2.example.controller.Controller;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
+import java.awt.event.*;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.prefs.Preferences;
@@ -83,7 +80,7 @@ public class MainFrame extends JFrame {
         toolBar.setToolbarListener(new ToolbarListener() {
             @Override
             public void saveEventOccured() {
-               System.out.println("save");
+                System.out.println("save");
 
                 connect();
 
@@ -134,6 +131,17 @@ public class MainFrame extends JFrame {
             }
         });
 
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                super.windowClosing(e);
+                System.out.println("System Closing...");
+                controller.disconnect();
+                dispose();
+                System.gc();
+
+            }
+        });
 
 //        add(textPanel, BorderLayout.CENTER);
         add(tablePanel, BorderLayout.CENTER);
@@ -143,7 +151,7 @@ public class MainFrame extends JFrame {
 
         setMinimumSize(new Dimension(500, 400));
         setSize(550, 400);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         setVisible(true);
     }
 
@@ -260,7 +268,10 @@ public class MainFrame extends JFrame {
                         "Do you really want to exit the application", "Confirm Exit", JOptionPane.OK_CANCEL_OPTION);
 
                 if (action == JOptionPane.OK_OPTION) {
-                    System.exit(0);
+                    WindowListener[] listeners = getWindowListeners();
+                    for(WindowListener listener : listeners){
+                        listener.windowClosing(new WindowEvent(MainFrame.this, 0));
+                    }
                 }
             }
         });

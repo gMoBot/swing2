@@ -1,6 +1,6 @@
-package com.swing1.example.gui;
+package com.swing2.example.gui;
 
-import com.swing1.example.model.Person;
+import com.swing2.example.model.Person;
 
 import javax.swing.table.AbstractTableModel;
 import java.util.List;
