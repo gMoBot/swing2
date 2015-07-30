@@ -24,6 +24,8 @@ public class MainFrame extends JFrame {
     private TablePanel tablePanel;
     private PrefsDialog prefsDialog;
     private Preferences prefs;
+    private JSplitPane splitPane;
+    private JTabbedPane tabbedPane;
 
     public MainFrame(){
         super("Personnel App");
@@ -35,9 +37,13 @@ public class MainFrame extends JFrame {
         formPanel = new FormPanel();
         tablePanel = new TablePanel();
         prefsDialog = new PrefsDialog(this);
+        tabbedPane = new JTabbedPane();
+        splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, formPanel, tabbedPane);
 
         prefs = Preferences.userRoot().node("db");
 
+        tabbedPane.addTab("Person Database", tablePanel);
+        tabbedPane.addTab("Messages", textPanel);
 
         controller = new Controller();
 
@@ -144,9 +150,10 @@ public class MainFrame extends JFrame {
         });
 
 //        add(textPanel, BorderLayout.CENTER);
-        add(tablePanel, BorderLayout.CENTER);
-        add(toolBar, BorderLayout.NORTH);
-        add(formPanel, BorderLayout.WEST);
+//        add(tablePanel, BorderLayout.CENTER);
+        add(splitPane, BorderLayout.CENTER);
+        add(toolBar, BorderLayout.PAGE_START);
+//        add(formPanel, BorderLayout.WEST);
 
 
         setMinimumSize(new Dimension(500, 400));
@@ -202,6 +209,9 @@ public class MainFrame extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 JCheckBoxMenuItem menuItem = (JCheckBoxMenuItem) e.getSource();
 
+                if(menuItem.isSelected()){
+                    splitPane.setDividerLocation((int)formPanel.getMinimumSize().getWidth());
+                }
                 formPanel.setVisible(menuItem.isSelected());
 
             }

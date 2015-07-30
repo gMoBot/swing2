@@ -9,7 +9,7 @@ import java.net.URL;
 /**
  * Created by garrettcoggon on 6/25/15.
  */
-public class ToolBar extends JPanel implements ActionListener{
+public class ToolBar extends JToolBar implements ActionListener{
     private JButton saveButton;
     private JButton refreshButton;
     private ToolbarListener toolbarListener;
@@ -17,15 +17,19 @@ public class ToolBar extends JPanel implements ActionListener{
 
     public ToolBar(){
         setBorder(BorderFactory.createEtchedBorder());
-        saveButton = new JButton("Save");
+        setFloatable(false);
+
+        saveButton = new JButton();
         saveButton.setIcon(createIcon("../images/save.gif"));
-        refreshButton = new JButton("Refresh");
+        saveButton.setToolTipText("Save");
+
+        refreshButton = new JButton();
         refreshButton.setIcon(createIcon("../images/refresh.gif"));
 
         saveButton.addActionListener(this);
         refreshButton.addActionListener(this);
+        refreshButton.setToolTipText("Refresh");
 
-        setLayout(new FlowLayout(FlowLayout.LEFT));
 
         add(saveButton);
         add(refreshButton);
