@@ -26,6 +26,7 @@ public class MainFrame extends JFrame {
     private Preferences prefs;
     private JSplitPane splitPane;
     private JTabbedPane tabbedPane;
+    private MessagePanel messagePanel;
 
     public MainFrame(){
         super("Personnel App");
@@ -38,12 +39,13 @@ public class MainFrame extends JFrame {
         tablePanel = new TablePanel();
         prefsDialog = new PrefsDialog(this);
         tabbedPane = new JTabbedPane();
+        messagePanel = new MessagePanel();
         splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, formPanel, tabbedPane);
 
         prefs = Preferences.userRoot().node("db");
 
         tabbedPane.addTab("Person Database", tablePanel);
-        tabbedPane.addTab("Messages", textPanel);
+        tabbedPane.addTab("Messages", messagePanel);
 
         controller = new Controller();
 

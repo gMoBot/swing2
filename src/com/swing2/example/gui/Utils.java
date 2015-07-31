@@ -1,5 +1,8 @@
 package com.swing2.example.gui;
 
+import javax.swing.*;
+import java.net.URL;
+
 /**
  * Created by garrettcoggon on 6/26/15.
  */
@@ -16,5 +19,15 @@ public class Utils {
             return null;
         }
         return name.substring(pointIndex+1, name.length());
+    }
+
+    public static ImageIcon createIcon(String path){
+        URL url = System.class.getResource(path);
+
+        if (url == null){
+            System.err.println("Unable to load image: " + path);
+        }
+        ImageIcon icon = new ImageIcon(url);
+        return icon;
     }
 }
