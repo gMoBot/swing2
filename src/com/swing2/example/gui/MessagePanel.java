@@ -19,9 +19,9 @@ import java.util.concurrent.ExecutionException;
 /**
  * Created by garrettcoggon on 7/31/15.
  */
-public class MessagePanel extends JPanel {
+public class MessagePanel extends JPanel implements ProgressDialogListener {
 
-
+    private ProgressDialog progressDialog;
 
     private JTree serverTree;
     private ServerTreeCellRenderer treeCellRenderer;
@@ -29,8 +29,12 @@ public class MessagePanel extends JPanel {
 
     private Set<Integer> selectedServers;
     private MessageServer messageServer;
+    private SwingWorker<java.util.List<Message>, Integer> worker;
 
-    public MessagePanel(){
+    public MessagePanel(JFrame parent){
+
+        progressDialog = new ProgressDialog(parent, "Messages Downloading...");
+        progressDialog.setProgressDialogListener(this);
 
         messageServer = new MessageServer();
 
@@ -102,10 +106,12 @@ public class MessagePanel extends JPanel {
 
     private void retrieveMessages(){
 
-        System.out.println("Messages Waiting: " + messageServer.getMessageCount());
+        progressDialog.setMaximum(messageServer.getMessageCount());
+
+        progressDialog.setVisible(true);
 
 
-        SwingWorker<java.util.List<Message>, Integer> worker = new SwingWorker<java.util
+        worker = new SwingWorker<java.util
                 .List<Message>, Integer>() {
             @Override
             protected List<Message> doInBackground() throws Exception {
@@ -115,6 +121,9 @@ public class MessagePanel extends JPanel {
                 int count = 0;
 
                 for (Message message: messageServer) {
+                    if(isCancelled()){
+                        break;
+                    }
                     System.out.println(message.getTitle());
                     retrievedMessages.add(message);
 
@@ -126,6 +135,10 @@ public class MessagePanel extends JPanel {
 
             @Override
             protected void done() {
+                progressDialog.setVisible(false);
+
+                if(isCancelled()){return;}
+
                 try {
                     List<Message> retrievedMessages = get();
                     System.out.println("Retrieved " + retrievedMessages.size() + " messages");
@@ -140,7 +153,10 @@ public class MessagePanel extends JPanel {
             @Override
             protected void process(List<Integer> counts) {
                 int retrieved = counts.get(counts.size() - 1);
-                System.out.println("Got " + retrieved + " messages");
+
+                progressDialog.setValue(retrieved);
+
+//                System.out.println("Got " + retrieved + " messages");
 
             }
 
@@ -184,5 +200,15 @@ public class MessagePanel extends JPanel {
 
     }
 
+    @Override
+    public void progressDialogCancelled() {
+
+        System.out.println("Cancelled");
+
+        if(worker != null){
+            worker.cancel(true);
+        }
+
+    }
 }
 

@@ -39,7 +39,7 @@ public class MainFrame extends JFrame {
         tablePanel = new TablePanel();
         prefsDialog = new PrefsDialog(this);
         tabbedPane = new JTabbedPane();
-        messagePanel = new MessagePanel();
+        messagePanel = new MessagePanel(this);
         splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, formPanel, tabbedPane);
 
         prefs = Preferences.userRoot().node("db");
