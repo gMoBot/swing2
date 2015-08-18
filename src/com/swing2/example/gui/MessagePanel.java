@@ -12,8 +12,9 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreeSelectionModel;
 import java.awt.*;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.*;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 /**
  * Created by garrettcoggon on 7/31/15.
@@ -67,11 +68,10 @@ public class MessagePanel extends JPanel {
                 messageServer.setSelectedServers(selectedServers);
 
                 System.out.println(info + " : " + info.getId() + " : " + info.isChecked());
-                System.out.println("Messages Waiting: " + messageServer.getMessageCount());
 
-                for (Message message: messageServer){
-                    System.out.println(message.getTitle());
-                }
+
+                retrieveMessages();
+
             }
 
             @Override
@@ -100,6 +100,56 @@ public class MessagePanel extends JPanel {
         add(new JScrollPane(serverTree), BorderLayout.CENTER);
     }
 
+    private void retrieveMessages(){
+
+        System.out.println("Messages Waiting: " + messageServer.getMessageCount());
+
+
+        SwingWorker<java.util.List<Message>, Integer> worker = new SwingWorker<java.util
+                .List<Message>, Integer>() {
+            @Override
+            protected List<Message> doInBackground() throws Exception {
+
+                List<Message> retrievedMessages = new ArrayList<Message>();
+
+                int count = 0;
+
+                for (Message message: messageServer) {
+                    System.out.println(message.getTitle());
+                    retrievedMessages.add(message);
+
+                    count++;
+                    publish(count);
+                }
+                return retrievedMessages;
+            }
+
+            @Override
+            protected void done() {
+                try {
+                    List<Message> retrievedMessages = get();
+                    System.out.println("Retrieved " + retrievedMessages.size() + " messages");
+
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            protected void process(List<Integer> counts) {
+                int retrieved = counts.get(counts.size() - 1);
+                System.out.println("Got " + retrieved + " messages");
+
+            }
+
+        };
+
+        worker.execute();
+
+
+    }
     private DefaultMutableTreeNode createTree(){
 
         DefaultMutableTreeNode top = new DefaultMutableTreeNode("Servers");
