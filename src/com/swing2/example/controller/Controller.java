@@ -104,4 +104,8 @@ public class Controller {
         db.disconnect();
     }
 
+    public void configure(int port, String user, String password) throws SQLException {
+        db.configure(port, user, password);
+    }
+
 }

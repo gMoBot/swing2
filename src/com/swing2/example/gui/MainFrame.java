@@ -3,6 +3,8 @@ package com.swing2.example.gui;
 import com.swing2.example.controller.Controller;
 
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.IOException;
@@ -16,7 +18,7 @@ public class MainFrame extends JFrame {
 
     //TODO: intercept window closing to disconnect from db
 
-    private TextPanel textPanel;
+//    private TextPanel textPanel;
     private ToolBar toolBar;
     private FormPanel formPanel;
     private JFileChooser fileChooser;
@@ -33,7 +35,7 @@ public class MainFrame extends JFrame {
 
         setLayout(new BorderLayout());
 
-        textPanel = new TextPanel();
+//        textPanel = new TextPanel();
         toolBar = new ToolBar();
         formPanel = new FormPanel();
         tablePanel = new TablePanel();
@@ -60,6 +62,19 @@ public class MainFrame extends JFrame {
             }
         });
 
+        tabbedPane.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                int tabIndex = tabbedPane.getSelectedIndex();
+                System.out.println(tabIndex);
+
+                if (tabIndex == 1){
+                    messagePanel.refresh();
+                    System.out.println("Refreshing");
+                }
+            }
+        });
+
         prefsDialog.setPrefsListener(new PrefsListener() {
             @Override
             public void preferencesSet(String user, String password, int port) {
@@ -69,6 +84,13 @@ public class MainFrame extends JFrame {
                 prefs.put("password", password);
                 prefs.putInt("port", port);
 
+                try {
+                    controller.configure(port, user, password);
+                } catch (SQLException e) {
+                    JOptionPane.showMessageDialog(MainFrame.this, "Unable to re-connect to the " +
+                            "database", "Database Connection Problem", JOptionPane.ERROR_MESSAGE);
+                }
+
             }
         });
 
@@ -76,7 +98,14 @@ public class MainFrame extends JFrame {
         String user = prefs.get("user", "");
         String password = prefs.get("password", "");
         int port = prefs.getInt("port", 3306);
+
         prefsDialog.setDefaults(user, password, port);
+
+        try {
+            controller.configure(port, user, password);
+        } catch (SQLException e) {
+            System.err.println("Can't connect to database");
+        }
 
 
         fileChooser = new JFileChooser();

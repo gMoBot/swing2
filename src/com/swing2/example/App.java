@@ -1,4 +1,6 @@
-package com.swing2.example.gui;
+package com.swing2.example;
+
+import com.swing2.example.gui.MainFrame;
 
 import javax.swing.*;
 
